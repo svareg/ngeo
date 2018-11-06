@@ -965,7 +965,8 @@ ngeo.DataSource = class {
       this.supportsWFS && dataSource.supportsWFS &&
       this.queryable && dataSource.queryable &&
       this.wfsUrl === dataSource.wfsUrl &&
-      this.haveTheSameActiveDimensions(dataSource);
+      this.haveTheSameActiveDimensions(dataSource) &&
+      this.haveTheSameActiveDimensionsFilters(dataSource);
   }
 
   /**
@@ -1113,6 +1114,56 @@ ngeo.DataSource = class {
     }
 
     return share;
+  }
+
+  /**
+   * @param {!ngeox.DataSource} dataSource Remote data source to compare with
+   *     this one.
+   * @return {boolean} Whether the two data sources have the same active
+   *     dimensions. If both have no dimensions, they are considered to be
+   *     sharing the same dimensions.
+   * @export
+   * @override
+   */
+  haveTheSameActiveDimensionsFilters(dataSource) {
+    const myConfig = this.dimensionsFiltersConfig;
+    const itsConfig = dataSource.dimensionsFiltersConfig;
+    if (myConfig === null || itsConfig === null) {
+      return false;
+    }
+
+    const equals = function(key) {
+      let myKeyConfig = myConfig[key];
+      let itsKeyConfig = itsConfig[key];
+      if (myKeyConfig === undefined || itsKeyConfig === undefined) {
+        return false;
+      }
+
+      if (myKeyConfig.field != itsKeyConfig.field) {
+        return false;
+      }
+
+      let myValue = myKeyConfig.value != null ? myKeyConfig.value : this.dimensions[key];
+      let itsValue = itsKeyConfig.value != null ? itsKeyConfig.value : dataSource.dimensions[key];
+      if (myValue != itsValue) {
+        return false;
+      }
+
+      return true;
+    }.bind(this);
+
+    for (const key in this.dimensionsFiltersConfig) {
+      if (!equals(key)) {
+        return false;
+      }
+    }
+    for (const key in dataSource.dimensionsFiltersConfig) {
+      if (!equals(key)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 };
 

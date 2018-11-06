@@ -415,7 +415,8 @@ ngeo.Querent = class {
             (dataSource.dimensionsFiltersConfig && Object.keys(dataSource.dimensionsFiltersConfig).length > 0)) {
 
           goog.asserts.assert(
-            dataSources.length === 1,
+            dataSources.length === 1 ||
+            !(dataSource.timeRangeValue || (dataSource.filterRules && dataSource.filterRules.length)),
             `A data source having filterRules or timeRangeValue should issue
             a single query, alone.`
           );

@@ -526,6 +526,16 @@ ngeox.DataSource.prototype.combinableForWMS;
 ngeox.DataSource.prototype.combinableForWFS;
 
 /**
+ * @type {?ngeox.Dimensions}
+ */
+ngeox.DataSource.prototype.dimensions;
+
+/**
+ * @type {?ngeox.DimensionsFiltersConfig}
+ */
+ngeox.DataSource.prototype.dimensionsFiltersConfig;
+
+/**
  * @type {boolean}
  */
 ngeox.DataSource.prototype.queryable;
@@ -584,6 +594,16 @@ ngeox.DataSource.prototype.combinableWithDataSourceForWMS = function(dataSource)
  *     sharing the same dimensions.
  */
 ngeox.DataSource.prototype.haveTheSameActiveDimensions = function(dataSource) {};
+
+
+/**
+ * @param {!ngeox.DataSource} dataSource Remote data source to compare with
+ *     this one.
+ * @return {boolean} Whether the two data sources have the same active
+ *     dimensions. If both have no dimensions, they are considered to be
+ *     sharing the same dimensions.
+ */
+ngeox.DataSource.prototype.haveTheSameActiveDimensionsFilters = function(dataSource) {};
 
 
 /**
