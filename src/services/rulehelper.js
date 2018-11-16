@@ -8,6 +8,7 @@ goog.require('ngeo.rule.Geometry');
 goog.require('ngeo.rule.Rule');
 goog.require('ngeo.rule.Select');
 goog.require('ngeo.rule.Text');
+goog.require('ngeo.format.filter');
 goog.require('ol.format.WFS');
 goog.require('ol.format.filter');
 
@@ -556,11 +557,19 @@ ngeo.RuleHelper = class {
         );
       }
       if (beginValue && endValue) {
-        filter = ol.format.filter.during(
-          propertyName,
-          beginValue,
-          endValue
-        );
+        if (dataSource.ogcServerType == 'qgisserver') {
+          filter = ngeo.format.filter.dateBetween(
+            propertyName,
+            beginValue,
+            endValue
+          );
+        } else {
+          filter = ol.format.filter.during(
+            propertyName,
+            beginValue,
+            endValue
+          );
+        }
       }
     } else if (rule instanceof ngeo.rule.Select) {
       const selectedChoices = rule.selectedChoices;
