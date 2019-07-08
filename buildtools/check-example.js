@@ -102,6 +102,8 @@ function loaded(page, browser) {
   page.on('requestfinished', request => {
     const url = request.url();
     requestsURL.delete(url);
+    console.log(url);
+    console.log(request.headers);
     loaded(page, browser);
   });
   page.on('requestfailed', request => {
