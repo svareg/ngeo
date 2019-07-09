@@ -1335,11 +1335,13 @@ class PrintController {
       legendImage = node.metadata.legendImage;
       hiDPILegendImages = node.metadata.hiDPILegendImages;
     }
-    let dist = Number.MAX_VALUE;
-    if (legendImage) {
-      dist = Math.abs(Math.log(72 / dpi));
-      found_dpi = 72;
+    if (!legendImage) {
+      return undefined;
     }
+
+    let dist = Math.abs(Math.log(72 / dpi));
+    found_dpi = 72;
+
     if (hiDPILegendImages) {
       for (const str_dpi in hiDPILegendImages) {
         const new_dpi = parseFloat(str_dpi);
