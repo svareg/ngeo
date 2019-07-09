@@ -102,8 +102,11 @@ function loaded(page, browser) {
   page.on('requestfinished', request => {
     const url = request.url();
     requestsURL.delete(url);
+    console.log("=====");
     console.log(url);
-    console.log(request.headers);
+    for (const n in request.headers()) {
+      console.log(`${n}: ${request.headers()[n]}`);
+    }
     loaded(page, browser);
   });
   page.on('requestfailed', request => {
