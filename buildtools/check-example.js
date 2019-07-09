@@ -99,17 +99,20 @@ function loaded(page, browser) {
       request.abort();
     }
   });
-  page.on('requestfinished', request => {
-    const url = request.url();
-    requestsURL.delete(url);
+  page.on('response', response => {
+    const url = response.url();
     if (url.startsWith('https://geomapfish-demo-2-5.camptocamp.com')) {
       console.log("=====");
       console.log(url);
-      for (const n in request.headers()) {
-        console.log(`${n}: ${request.headers()[n]}`);
+      for (const n in response.headers()) {
+        console.log(`${n}: ${response.headers()[n]}`);
       }
-      loaded(page, browser);
     }
+  });
+  page.on('requestfinished', request => {
+    const url = request.url();
+    requestsURL.delete(url);
+    loaded(page, browser);
   });
   page.on('requestfailed', request => {
     const url = request.url();
@@ -117,15 +120,7 @@ function loaded(page, browser) {
         url.startsWith('https://geomapfish-demo-2-5.camptocamp.com/') ||
         url.startsWith('https://wms.geo.admin.ch/')) {
       console.log(`Request failed on: ${url}`);
-      if (url.startsWith('https://geomapfish-demo-2-5.camptocamp.com')) {
-        console.log("=====");
-        console.log(url);
-        for (const n in request.headers()) {
-          console.log(`${n}: ${request.headers()[n]}`);
-        }
-        loaded(page, browser);
-      }
-        process.exit(2);
+      process.exit(2);
     }
     loaded(page, browser);
   });
