@@ -128,7 +128,7 @@ function loaded(page, browser) {
       console.log(`Console ${type}`);
       console.log(`On: ${location.url} ${location.lineNumber}:${location.columnNumber}.`);
       console.log(message.text());
-      process.exit(2);
+      //process.exit(2);
     }
   });
   await page.goto(url).catch(error => {
