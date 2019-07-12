@@ -99,41 +99,20 @@ function loaded(page, browser) {
       request.abort();
     }
   });
-  page.on('response', response => {
-    const url = response.url();
-    if (url.startsWith('https://geomapfish-demo-2-5.camptocamp.com')) {
-      console.log("=====");
-      console.log(url);
-      for (const n in response.headers()) {
-        console.log(`${n}: ${response.headers()[n]}`);
-      }
-    }
-  });
   page.on('requestfinished', request => {
     const url = request.url();
-    if (url.startsWith('https://geomapfish-demo-2-5.camptocamp.com')) {
-      console.log("=====");
-      console.log(url);
-      for (const n in request.response().headers()) {
-        console.log(`${n}: ${request.response().headers()[n]}`);
-      }
-    }
     requestsURL.delete(url);
     loaded(page, browser);
   });
   page.on('requestfailed', request => {
     const url = request.url();
-    if (url.startsWith('https://geomapfish-demo-2-5.camptocamp.com')) {
-      console.log("=====");
-      console.log(url);
-      for (const n in request.response().headers()) {
-        console.log(`${n}: ${request.response().headers()[n]}`);
-      }
-    }
     if (url.startsWith('http://localhost:3000/') ||
         url.startsWith('https://geomapfish-demo-2-5.camptocamp.com/') ||
         url.startsWith('https://wms.geo.admin.ch/')) {
       console.log(`Request failed on: ${url}`);
+      for (const n in request.response().headers()) {
+        console.log(`${n}: ${request.response().headers()[n]}`);
+      }
       process.exit(2);
     }
     loaded(page, browser);
