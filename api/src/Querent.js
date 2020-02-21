@@ -54,14 +54,17 @@ export function getFeaturesFromIds(layer, ids) {
         return;
       }
 
-      const featureIds = ids.map(id => `${layer}.${id}`);
+      let featureIds = [];
+      for(let wmsLayer of overlayDef.layer.childLayers) {
+        featureIds = featureIds.concat(ids.map(id => `${wmsLayer.name}.${id}`));
+      }
 
       const params = {
         'FEATUREID': featureIds.join(','),
-        'MAXFEATURES': ids.length,
+        'MAXFEATURES': featureIds.length,
         'REQUEST': 'GetFeature',
         'SERVICE': 'WFS',
-        'TYPENAME': layer,
+        'TYPENAME': overlayDef.layer.layers,
         'VERSION': '1.0.0'
       };
       const url = olUriAppendParams(overlayDef.ogcServer.urlWfs, params);
